@@ -1,4 +1,4 @@
-# linear-regression-pytorch
+# deeplearning-algorithms-pytorch
 Linear regression algorithm based on Pytorch
 
 ## Steps
