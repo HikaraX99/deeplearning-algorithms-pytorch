@@ -1,7 +1,9 @@
 # deeplearning-algorithms-pytorch
-Linear regression algorithm based on Pytorch
 
-## Steps
+## Linear regression
+
+### Steps
+
 1. Create a sample dataset with `sample_size=10000`
 2. Generate the labels by linear function `y = Xw + b + noise`
 3. Define true `w` and `b` value
@@ -10,19 +12,22 @@ Linear regression algorithm based on Pytorch
 6. Define the model, loss function, and stochastic gradient descent function
 7. Train the model
 
-## Optimization
+### Optimization
+
 This linear regression algorithm uses stochastic gradient descent to take advantage of parallel computing
+
 ```python
 def sgd(params, lr, batch_size):
     # small batch size sgd
     with torch.no_grad():
         for param in params:
             # update params
-            param -= lr * param.grad/batch_size 
+            param -= lr * param.grad/batch_size
             param.grad.zero_()
 ```
 
-## Result
+### Result
+
 ```
 epoch 1, loss 0.000050
 epoch 2, loss 0.000050
@@ -32,5 +37,12 @@ w's error of estimate: tensor([-4.7779e-04, -6.6757e-05], grad_fn=<SubBackward0>
 b's error of estimate: tensor([-0.0003], grad_fn=<RsubBackward1>)
 ```
 
+## Softmax
+
+### Training result
+
+![alt text](image.png)
+
 ## Reference
-This algorithm refers to the book [*Dive into Deep Learning*](https://d2l.ai/)
+
+All the algorithms refer to the book [_Dive into Deep Learning_](https://d2l.ai/)
