@@ -1,3 +1,4 @@
+from matplotlib import pyplot as plt
 import torch
 from torch import nn
 from d2l import torch as d2l
@@ -9,9 +10,9 @@ train_iter, test_iter = d2l.load_data_fashion_mnist(batch_size)
 # 28 x 28 = 784 pixels, num_outputs: categories, num_hiddens: hidden layer outputs
 num_inputs, num_outputs, num_hiddens = 784, 10, 256
 
-W1 = nn.Parameter(torch.randn(num_inputs, num_hiddens, requires_grad=True))
+W1 = nn.Parameter(torch.randn(num_inputs, num_hiddens, requires_grad=True)* 0.01)
 b1 = nn.Parameter(torch.zeros(num_hiddens, requires_grad=True))
-W2 = nn.Parameter(torch.randn(num_hiddens, num_outputs, requires_grad=True))
+W2 = nn.Parameter(torch.randn(num_hiddens, num_outputs, requires_grad=True)* 0.01)
 b2 = nn.Parameter(torch.zeros(num_outputs, requires_grad=True))
 
 params = [W1, b1, W2, b2]
@@ -25,9 +26,11 @@ def net (X):
     H = relu(X @ W1 + b1)
     return (H @ W2 + b2)
 
-loss = nn.CrossEntropyLoss()
+loss = nn.CrossEntropyLoss(reduction='none')
 
 num_epochs, lr = 10, 0.1
 updater = torch.optim.SGD(params, lr=lr)
+plt.ion()
 train(net, train_iter, test_iter, loss, num_epochs, updater)
-
+plt.ioff()
+plt.show()
