@@ -47,7 +47,7 @@ b's error of estimate: tensor([-0.0003], grad_fn=<RsubBackward1>)
     Activation function: ReLU
 ### Training result
 
-<img width="350" height="250" alt="image" src="https://github.com/user-attachments/assets/5b161555-81af-4bfa-a933-07e62f0f6e3f" />
+<img width="350" height="250" alt="image" src="https://github.com/user-attachments/assets/8de1f4a3-6a3c-47d9-aece-22fd02a95369" />
 
 ## Reference
 
