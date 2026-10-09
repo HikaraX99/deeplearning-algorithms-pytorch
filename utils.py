@@ -228,6 +228,57 @@ class RNNModelScratch:
         return self.init_state(batch_size, self.num_hiddens, device)
 
 
+class RNNModel(nn.Module):
+    """RNN/GRU/LSTM language model using PyTorch recurrent layers."""
+
+    def __init__(self, rnn_layer, vocab_size):
+        super().__init__()
+        self.rnn = rnn_layer
+        self.vocab_size = vocab_size
+        self.num_hiddens = self.rnn.hidden_size
+
+        # Map each hidden state to logits over the vocabulary.
+        self.linear = nn.Linear(self.num_hiddens, self.vocab_size)
+
+    def forward(self, inputs, state):
+        # inputs shape: (batch_size, num_steps)
+        # RNN/LSTM here expects: (num_steps, batch_size, input_size)
+        X = F.one_hot(inputs.T.long(), self.vocab_size).type(torch.float32)
+
+        Y, state = self.rnn(X, state)
+
+        # Y shape: (num_steps, batch_size, num_hiddens)
+        # Flatten time and batch dimensions, then predict vocabulary logits.
+        output = self.linear(Y.reshape((-1, Y.shape[-1])))
+        return output, state
+
+    def begin_state(self, batch_size, device):
+        # LSTM needs both hidden state h and cell state c.
+        if isinstance(self.rnn, nn.LSTM):
+            return (
+                torch.zeros(
+                    self.rnn.num_layers,
+                    batch_size,
+                    self.num_hiddens,
+                    device=device
+                ),
+                torch.zeros(
+                    self.rnn.num_layers,
+                    batch_size,
+                    self.num_hiddens,
+                    device=device
+                )
+            )
+
+        # Vanilla RNN and GRU only need the hidden state.
+        return torch.zeros(
+            self.rnn.num_layers,
+            batch_size,
+            self.num_hiddens,
+            device=device
+        )
+
+
 # RNN utilities
 
 def predict_ch8(prefix, num_preds, net, vocab, device):
